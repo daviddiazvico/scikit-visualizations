@@ -35,4 +35,5 @@ def test_scores_table():
 
 def test_hypotheses_table():
     """Tests hypotheses table."""
-    hypotheses_table(scores, estimators)
+    for test in ('friedman-holm', 'wilcoxon', 'mannwhitneyu'):
+        hypotheses_table(scores, estimators, test=test)

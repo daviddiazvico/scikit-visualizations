@@ -1,6 +1,6 @@
 """
 Scikit-learn-compatible visualizations for scores and hypothesis testing.
-Nonparametric tests based on https://github.com/citiususc/stac.
+Friedman and Holm tests based on https://github.com/citiususc/stac.
 
 @author: David Diaz Vico
 @license: MIT
@@ -9,7 +9,7 @@ Nonparametric tests based on https://github.com/citiususc/stac.
 import itertools as it
 import numpy as np
 import pandas as pd
-from scipy.stats import f, norm, rankdata
+from scipy.stats import f, mannwhitneyu, norm, rankdata, wilcoxon
 
 
 def scores_table(datasets, estimators, scores, stds=None,
@@ -119,8 +119,6 @@ def holm_multitest(models, pivots):
         comparisons: array-like
                      Strings identifier of each comparison with format 'model_i
                      vs model_j'.
-        zvalues: array-like
-                 The computed Z-value statistic for each comparison.
         pvalues: array-like
                  The associated adjusted p-values which can be compared with a
                  significance level.
@@ -143,11 +141,96 @@ def holm_multitest(models, pivots):
     m = int(k * (k - 1) / 2.)
     adjpvalues = [min(max((m - j) * pvalues[j] for j in range(i + 1)),
                       1) for i in range(m)]
-    return comparisons, zvalues, adjpvalues
+    return comparisons, adjpvalues
 
 
-def hypotheses_table(samples, models, alpha=0.05, greater_is_better=True,
-                     method='average'):
+def wilcoxon_multitest(models, samples, zero_method='wilcox', correction=False):
+    """ Post-hoc test using the pivotal quantities obtained by a Wilcoxon
+        signed rank test.
+
+        Tests the hypothesis that the scores of each pair of models come from
+        different distributions.
+
+        Parameters
+        ----------
+        models: array-like
+                Model names.
+        samples: array-like
+                 Matrix of samples where each column represents a model.
+        zero_method: {'pratt', 'wilcox', 'zsplit'}, default: 'wilcox'
+                     'pratt': Pratt treatment: includes zero-differences in the
+                                               ranking process (more
+                                               conservative).
+                     'wilcox': Wilcox treatment: discards all zero-differences.
+                     'zsplit': Zero rank split: just like Pratt, but spliting
+                               the zero rank between positive and negative ones.
+        correction: bool, default=False
+                    If True, apply continuity correction by adjusting the
+                    Wilcoxon rank statistic by 0.5 towards the mean value when
+                    computing the z-statistic.
+
+        Returns
+        -------
+        comparisons: array-like
+                     Strings identifier of each comparison with format 'model_i
+                     vs model_j'.
+        pvalues: array-like
+                 The associated p-values which can be compared with a
+                 significance level.
+    """
+    versus = list(it.combinations(range(len(models)), 2))
+    comparisons = [models[vs[0]] + " vs " + models[vs[1]] for vs in versus]
+    pvalues = [wilcoxon(samples[:, vs[0]], samples[:, vs[1]],
+                        zero_method=zero_method, correction=correction)[1] for vs in versus]
+    return comparisons, pvalues
+
+
+def mannwhitneyu_multitest(models, samples, use_continuity=True,
+                           alternative=None):
+    """ Post-hoc test using the pivotal quantities obtained by a Mann-Whitney
+        rank test.
+
+        Tests the hypothesis that the scores of each pair of models come from
+        different distributions.
+
+        Parameters
+        ----------
+        models: array-like
+                Model names.
+        samples: array-like
+                 Matrix of samples where each column represents a model.
+        use_continuity: bool, default=True
+                        Whether a continuity correction (1/2.) should be taken
+                        into account.
+        alternative: {None (deprecated), 'less', 'two-sided', 'greater'},
+                     default=None
+                     Whether to get the p-value for the one-sided hypothesis
+                     ('less' or 'greater') or for the two-sided hypothesis
+                     ('two-sided'). Defaults to None, which results in a p-value
+                     half the size of the 'two-sided' p-value and a different U
+                     statistic. The default behavior is not the same as using
+                     'less' or 'greater': it only exists for backward
+                     compatibility and is deprecated.
+
+        Returns
+        -------
+        comparisons: array-like
+                     Strings identifier of each comparison with format 'model_i
+                     vs model_j'.
+        pvalues: array-like
+                 The associated p-values which can be compared with a
+                 significance level.
+    """
+    versus = list(it.combinations(range(len(models)), 2))
+    comparisons = [models[vs[0]] + " vs " + models[vs[1]] for vs in versus]
+    pvalues = [mannwhitneyu(samples[:, vs[0]], samples[:, vs[1]],
+                            use_continuity=use_continuity,
+                            alternative=alternative)[1] for vs in versus]
+    return comparisons, pvalues
+
+
+def hypotheses_table(samples, models, alpha=0.05, test='friedman-holm',
+                     **test_args):
     """ Hypotheses table.
 
         Prints a table where each row represents the hypothesis that the
@@ -162,11 +245,11 @@ def hypotheses_table(samples, models, alpha=0.05, greater_is_better=True,
                 Model names.
         alpha: float in [0, 1], default=0.05
                Significance level.
-        greater_is_better: boolean, default=True
-                           Whether a greater score is better (score) or worse
-                           (loss).
-        method: {'average', 'min', 'max', 'dense', 'ordinal'}, default='average'
-                Method used to solve ties.
+        test: {'friedman-holm', 'wilcoxon'. 'mannwhitneyu'},
+              default='friedman-holm'
+              Ranking test used.
+        **test_args: dict
+                     Optional ranking test arguments.
 
         Returns
         -------
@@ -174,10 +257,14 @@ def hypotheses_table(samples, models, alpha=0.05, greater_is_better=True,
                Table of p-values and rejection/non-rejection for each
                hypothesis.
     """
-    fvalue, pvalue, ranks, pivots = friedman_test(samples,
-                                                  greater_is_better=greater_is_better,
-                                                  method=method)
-    comparisons, zvalues, pvalues = holm_multitest(models, pivots)
+    if test == 'friedman-holm':
+        fvalue, pvalue, ranks, pivots = friedman_test(samples, **test_args)
+        comparisons, pvalues = holm_multitest(models, pivots)
+    elif test == 'wilcoxon':
+        comparisons, pvalues = wilcoxon_multitest(models, samples, **test_args)
+    elif test == 'mannwhitneyu':
+        comparisons, pvalues = mannwhitneyu_multitest(models, samples,
+                                                      **test_args)
     table = pd.DataFrame(index=comparisons, columns=['p-value', 'Hypothesis'])
     for i, d in enumerate(comparisons):
         table.loc[d] = ['{0:.2f}'.format(pvalues[i]),
