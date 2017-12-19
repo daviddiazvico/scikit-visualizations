@@ -37,6 +37,7 @@ def test_scores_table():
 def test_hypotheses_table():
     """Tests hypotheses table."""
     for test in ('mannwhitneyu', 'wilcoxon'):
+        hypotheses_table(scores, estimators, test=test)
         for correction in ('bonferroni', 'sidak', 'holm-sidak', 'holm',
                            'simes-hochberg', 'hommel', 'fdr_bh', 'fdr_by',
                            'fdr_tsbh', 'fdr_tsbky'):

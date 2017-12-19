@@ -55,7 +55,7 @@ def scores_table(datasets, estimators, scores, stds=None,
 
 
 def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
-                     correction='holm', **test_args):
+                     correction=None, **test_args):
     """ Hypotheses table.
 
         Prints a hypothesis table with a selected test and correction.
@@ -74,7 +74,7 @@ def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
         correction: {'bonferroni', 'sidak', 'holm-sidak', 'holm',
                      'simes-hochberg', 'hommel', 'fdr_bh', 'fdr_by', 'fdr_tsbh',
                      'fdr_tsbky'},
-              default='holm'
+              default=None
               Method used to adjust the p-values.
         **test_args: dict
                      Optional ranking test arguments.
@@ -89,11 +89,14 @@ def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
     comparisons = [models[vs[0]] + " vs " + models[vs[1]] for vs in versus]
     tests = {'mannwhitneyu': mannwhitneyu, 'wilcoxon': wilcoxon}
     pvalues = [tests[test](samples[:, vs[0]], samples[:, vs[1]], **test_args)[1] for vs in versus]
-    reject, corrected_pvalues, alphac_sidak, alphac_bonf = multipletests(pvalues,
-                                                                         alpha,
-                                                                         method=correction)
+    if correction is not None:
+        reject, pvalues, alphac_sidak, alphac_bonf = multipletests(pvalues,
+                                                                   alpha,
+                                                                   method=correction)
+    else:
+        reject = ['Rejected' if pvalue <= alpha else 'Not rejected' for pvalue in pvalues]
     table = pd.DataFrame(index=comparisons, columns=['p-value', 'Hypothesis'])
     for i, d in enumerate(comparisons):
-        table.loc[d] = ['{0:.2f}'.format(corrected_pvalues[i]),
+        table.loc[d] = ['{0:.2f}'.format(pvalues[i]),
                         'Rejected' if reject[i] else 'Not rejected']
     return table
