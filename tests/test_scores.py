@@ -32,14 +32,16 @@ scores = np.asarray(((89.79, 89.78, 89.76, 89.88, 89.85, 89.91, 89.93),
 def test_scores_table():
     """Tests scores table."""
     scores_table(datasets, estimators, scores)
+    scores_table(datasets, estimators, scores, stds=scores/10.0)
 
 
 def test_hypotheses_table():
     """Tests hypotheses table."""
-    for test in ('mannwhitneyu', 'wilcoxon'):
-        hypotheses_table(scores, estimators, test=test)
-        for correction in ('bonferroni', 'sidak', 'holm-sidak', 'holm',
-                           'simes-hochberg', 'hommel', 'fdr_bh', 'fdr_by',
-                           'fdr_tsbh', 'fdr_tsbky'):
-            hypotheses_table(scores, estimators, test=test,
-                             correction=correction)
+    for multitest in ('kruskal', 'friedmanchisquare', None):
+        for test in ('mannwhitneyu', 'wilcoxon'):
+            hypotheses_table(scores, estimators, multitest=multitest, test=test)
+            for correction in ('bonferroni', 'sidak', 'holm-sidak', 'holm',
+                               'simes-hochberg', 'hommel', 'fdr_bh', 'fdr_by',
+                               'fdr_tsbh', 'fdr_tsbky'):
+                hypotheses_table(scores, estimators, multitest=multitest,
+                                 test=test, correction=correction)

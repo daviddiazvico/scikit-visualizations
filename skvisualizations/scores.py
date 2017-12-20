@@ -8,7 +8,7 @@ Scikit-learn-compatible visualizations for scores and hypothesis testing.
 import itertools as it
 import numpy as np
 import pandas as pd
-from scipy.stats import mannwhitneyu, rankdata, wilcoxon
+from scipy.stats import kruskal, friedmanchisquare, mannwhitneyu, rankdata, wilcoxon
 from statsmodels.sandbox.stats.multicomp import multipletests
 
 
@@ -54,8 +54,9 @@ def scores_table(datasets, estimators, scores, stds=None,
     return table
 
 
-def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
-                     correction=None, **test_args):
+def hypotheses_table(samples, models, alpha=0.05, multitest=None,
+                     test='wilcoxon', correction=None, multitest_args=dict(),
+                     test_args=dict()):
     """ Hypotheses table.
 
         Prints a hypothesis table with a selected test and correction.
@@ -68,6 +69,9 @@ def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
                 Model names.
         alpha: float in [0, 1], default=0.05
                Significance level.
+        multitest: {'kruskal', 'friedmanchisquare'}
+                   default=None
+                   Ranking multitest used.
         test: {'mannwhitneyu', 'wilcoxon'},
               default='wilcoxon'
               Ranking test used.
@@ -76,18 +80,33 @@ def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
                      'fdr_tsbky'},
               default=None
               Method used to adjust the p-values.
-        **test_args: dict
-                     Optional ranking test arguments.
+        multitest_args: dict
+                        Optional ranking test arguments.
+        test_args: dict
+                   Optional ranking test arguments.
 
         Returns
         -------
-        table: array-like
-               Table of p-values and rejection/non-rejection for each
+        multitest_table: array-like
+                         Table of p-value and rejection/non-rejection for the
+                         multitest hypothesis.
+        test_table: array-like
+               Table of p-values and rejection/non-rejection for each test
                hypothesis.
     """
     versus = list(it.combinations(range(len(models)), 2))
     comparisons = [models[vs[0]] + " vs " + models[vs[1]] for vs in versus]
+    multitests = {'kruskal': kruskal, 'friedmanchisquare': friedmanchisquare}
     tests = {'mannwhitneyu': mannwhitneyu, 'wilcoxon': wilcoxon}
+    multitest_table = None
+    if multitest is not None:
+        multitest_table = pd.DataFrame(index=[multitest], columns=['p-value',
+                                                                   'Hypothesis'])
+        statistic, pvalue = multitests[multitest](*samples, **multitest_args)
+        reject = 'Rejected' if pvalue <= alpha else 'Not rejected'
+        multitest_table.loc[multitest] = ['{0:.2f}'.format(pvalue), reject]
+        if pvalue > alpha:
+            return multitest_table, None
     pvalues = [tests[test](samples[:, vs[0]], samples[:, vs[1]], **test_args)[1] for vs in versus]
     if correction is not None:
         reject, pvalues, alphac_sidak, alphac_bonf = multipletests(pvalues,
@@ -95,8 +114,8 @@ def hypotheses_table(samples, models, alpha=0.05, test='wilcoxon',
                                                                    method=correction)
     else:
         reject = ['Rejected' if pvalue <= alpha else 'Not rejected' for pvalue in pvalues]
-    table = pd.DataFrame(index=comparisons, columns=['p-value', 'Hypothesis'])
+    test_table = pd.DataFrame(index=comparisons, columns=['p-value',
+                                                          'Hypothesis'])
     for i, d in enumerate(comparisons):
-        table.loc[d] = ['{0:.2f}'.format(pvalues[i]),
-                        'Rejected' if reject[i] else 'Not rejected']
-    return table
+        test_table.loc[d] = ['{0:.2f}'.format(pvalues[i]), reject[i]]
+    return multitest_table, test_table

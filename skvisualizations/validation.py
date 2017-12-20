@@ -97,15 +97,15 @@ def metaparameter_plot(search, param, log_scale=True):
         None.
     """
     param_range = search.cv_results_['param_' + param].data.astype('float32')
-    train_mean = search.cv_results_['mean_train_' + search.refit]
-    train_std = search.cv_results_['std_train_' + search.refit]
-    test_mean = search.cv_results_['mean_test_' + search.refit]
-    test_std = search.cv_results_['std_test_' + search.refit]
+    train_mean = search.cv_results_['mean_train_score']
+    train_std = search.cv_results_['std_train_score']
+    test_mean = search.cv_results_['mean_test_score']
+    test_std = search.cv_results_['std_test_score']
     plt.figure()
     if log_scale:
         plt.xscale('log')
     plt.xlabel(param)
-    plt.ylabel(search.refit)
+    plt.ylabel('score')
     plt.plot(param_range, train_mean, 'o', label='Train', color='b')
     plt.fill_between(param_range, train_mean - train_std,
                      train_mean + train_std, alpha=0.2, color='b')
