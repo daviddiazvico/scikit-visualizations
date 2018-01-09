@@ -78,10 +78,10 @@ def regressor_scatter(X, y, preds):
     plt.show()
 
 
-def metaparameter_plot(search, param, log_scale=True):
+def metaparameter_plot(search, param, score='score', log_scale=True):
     """ Metaparameter plot.
 
-        Train and test scores plotted along a meta-parameter search space.
+        Train and test metric plotted along a meta-parameter search space.
 
         Parameters
         ----------
@@ -89,6 +89,8 @@ def metaparameter_plot(search, param, log_scale=True):
                 Fitted sklearn search object.
         param: string
                Name of the meta-parameter.
+        score: string
+               Name of the metric
         log_scale: boolean, default=True
                    Wether to use a logarithmic scale.
 
@@ -97,15 +99,15 @@ def metaparameter_plot(search, param, log_scale=True):
         None.
     """
     param_range = search.cv_results_['param_' + param].data.astype('float32')
-    train_mean = search.cv_results_['mean_train_score']
-    train_std = search.cv_results_['std_train_score']
-    test_mean = search.cv_results_['mean_test_score']
-    test_std = search.cv_results_['std_test_score']
+    train_mean = search.cv_results_['mean_train_' + score]
+    train_std = search.cv_results_['std_train_' + score]
+    test_mean = search.cv_results_['mean_test_' + score]
+    test_std = search.cv_results_['std_test_' + score]
     plt.figure()
     if log_scale:
         plt.xscale('log')
     plt.xlabel(param)
-    plt.ylabel('score')
+    plt.ylabel(score)
     plt.plot(param_range, train_mean, 'o', label='Train', color='b')
     plt.fill_between(param_range, train_mean - train_std,
                      train_mean + train_std, alpha=0.2, color='b')
