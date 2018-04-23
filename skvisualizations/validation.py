@@ -15,7 +15,7 @@ from sklearn.decomposition import PCA
 sns.set(style="white", palette="muted", color_codes=True)
 
 
-def classifier_scatter(X, y, pca_n_components=2):
+def classifier_scatter(X, y, fname, pca_n_components=2, **kwargs):
     """ Classifier scatter.
 
         Classifier scatter plot.
@@ -26,8 +26,11 @@ def classifier_scatter(X, y, pca_n_components=2):
            The transformed data.
         y: numpy array of shape [n_samples]
            Target values.
+        fname: str or file-like object
+               https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html
         pca_n_components: integer, default=2
                           Dimension of the PCA projection of X.
+        **kwargs: optional savefig named args
 
         Returns
         -------
@@ -42,10 +45,10 @@ def classifier_scatter(X, y, pca_n_components=2):
                         columns=names)
     sns.set()
     sns.pairplot(data, hue='class', x_vars=names[:-1], y_vars=names[:-1])
-    plt.show()
+    plt.savefig(fname, **kwargs)
 
 
-def regressor_scatter(X, y, preds):
+def regressor_scatter(X, y, preds, fname, **kwargs):
     """ Regressor scatter.
 
         Regressor scatter plot.
@@ -58,6 +61,9 @@ def regressor_scatter(X, y, preds):
            Target values.
         preds: numpy array of shape [n_samples]
                Predicted values.
+        fname: str or file-like object
+               https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html
+        **kwargs: optional savefig named args
 
         Returns
         -------
@@ -75,10 +81,11 @@ def regressor_scatter(X, y, preds):
                         columns=names)
     sns.set()
     sns.lmplot(x='X', y='y', hue='source', data=data)
-    plt.show()
+    plt.savefig(fname, **kwargs)
 
 
-def metaparameter_plot(search, param, score='score', log_scale=True):
+def metaparameter_plot(search, param, fname, score='score', log_scale=True,
+                       **kwargs):
     """ Metaparameter plot.
 
         Train and test metric plotted along a meta-parameter search space.
@@ -89,10 +96,13 @@ def metaparameter_plot(search, param, score='score', log_scale=True):
                 Fitted sklearn search object.
         param: string
                Name of the meta-parameter.
+        fname: str or file-like object
+               https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html
         score: string
                Name of the metric
         log_scale: boolean, default=True
                    Wether to use a logarithmic scale.
+        **kwargs: optional savefig named args
 
         Returns
         -------
@@ -120,10 +130,10 @@ def metaparameter_plot(search, param, score='score', log_scale=True):
              'o', color='r')
     plt.axvline(x=param_range[search.best_index_], color='r')
     plt.legend(loc='best')
-    plt.show()
+    plt.savefig(fname, **kwargs)
 
 
-def keras_history_plot(history):
+def keras_history_plot(history, fname, **kwargs):
     """ Keras history plot.
 
         Train loss plotted for each training epoch.
@@ -132,6 +142,9 @@ def keras_history_plot(history):
         ----------
         history: history object
                  Keras history object.
+        fname: str or file-like object
+               https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html
+        **kwargs: optional savefig named args
 
         Returns
         -------
@@ -143,4 +156,4 @@ def keras_history_plot(history):
     for k, v in history.items():
         plt.plot(v, label=k)
     plt.legend(loc='best')
-    plt.show()
+    plt.savefig(fname, **kwargs)

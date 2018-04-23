@@ -18,7 +18,7 @@ from skvisualizations.validation import (classifier_scatter, regressor_scatter,
 def test_classifier_scatter():
     """Tests classifier scatter."""
     X, y = load_iris(return_X_y=True)
-    classifier_scatter(X, y)
+    classifier_scatter(X, y, 'classifier_scatter.pdf')
 
 
 def test_regressor_scatter():
@@ -26,7 +26,7 @@ def test_regressor_scatter():
     X, y = load_boston(return_X_y=True)
     estimator = DummyRegressor()
     estimator.fit(X, y)
-    regressor_scatter(X, y, estimator.predict(X))
+    regressor_scatter(X, y, estimator.predict(X), 'regressor_scatter.pdf')
 
 
 def test_metaparameter_plot():
@@ -35,4 +35,4 @@ def test_metaparameter_plot():
     estimator = GridSearchCV(DummyRegressor(strategy='constant'),
                              {'constant': [1.0, 2.0, 3.0]})
     estimator.fit(X, y)
-    metaparameter_plot(estimator, 'constant')
+    metaparameter_plot(estimator, 'constant', 'metaparameter_plot.pdf')
