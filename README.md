@@ -2,11 +2,9 @@
 Scikit-learn-compatible visualizations
 
 ## Status
-[![Build Status](https://travis-ci.org/daviddiazvico/scikit-visualizations.svg?branch=master)](https://travis-ci.org/daviddiazvico/scikit-visualizations)
-[![Coverage Status](https://coveralls.io/repos/github/daviddiazvico/scikit-visualizations/badge.svg)](https://coveralls.io/github/daviddiazvico/scikit-visualizations)
+[![Build Status](https://travis-ci.com/daviddiazvico/scikit-visualizations.svg?branch=master)](https://travis-ci.com/daviddiazvico/scikit-visualizations)
 [![Maintainability](https://api.codeclimate.com/v1/badges/0d44dcdbb204b8f4fc37/maintainability)](https://codeclimate.com/github/daviddiazvico/scikit-visualizations/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/0d44dcdbb204b8f4fc37/test_coverage)](https://codeclimate.com/github/daviddiazvico/scikit-visualizations/test_coverage)
-[![Code Health](https://landscape.io/github/daviddiazvico/scikit-visualizations/master/landscape.svg?style=flat)](https://landscape.io/github/daviddiazvico/scikit-visualizations/master)
 
 ## Installation
 Available in [PyPI](https://pypi.python.org/pypi?:action=display&name=scikit-visualizations)
