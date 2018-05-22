@@ -1,0 +1,305 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>skvisualizations package &#8212; scikit-visualizations 0.1.1 documentation</title>
+    <link rel="stylesheet" href="alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="pygments.css" type="text/css" />
+    <script type="text/javascript" src="documentation_options.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="underscore.js"></script>
+    <script type="text/javascript" src="doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="skvisualizations-package">
+<h1>skvisualizations package<a class="headerlink" href="#skvisualizations-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-skvisualizations.scores">
+<span id="skvisualizations-scores-module"></span><h2>skvisualizations.scores module<a class="headerlink" href="#module-skvisualizations.scores" title="Permalink to this headline">¶</a></h2>
+<p>Scikit-learn-compatible visualizations for scores and hypothesis testing.</p>
+<p>&#64;author: David Diaz Vico
+&#64;license: MIT</p>
+<dl class="function">
+<dt id="skvisualizations.scores.hypotheses_table">
+<code class="descclassname">skvisualizations.scores.</code><code class="descname">hypotheses_table</code><span class="sig-paren">(</span><em>samples</em>, <em>models</em>, <em>alpha=0.05</em>, <em>multitest=None</em>, <em>test='wilcoxon'</em>, <em>correction=None</em>, <em>multitest_args={}</em>, <em>test_args={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/scores.html#hypotheses_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.scores.hypotheses_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hypotheses table.</p>
+<p>Prints a hypothesis table with a selected test and correction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>samples</strong> (<em>array-like</em>) – Matrix of samples where each column represent a model.</li>
+<li><strong>models</strong> (<em>array-like</em>) – Model names.</li>
+<li><strong>alpha</strong> (<em>float in</em><em> [</em><em>0</em><em>, </em><em>1</em><em>]</em><em>, </em><em>default=0.05</em>) – Significance level.</li>
+<li><strong>multitest</strong> (<em>{'kruskal'</em><em>, </em><em>'friedmanchisquare'}</em>) – default=None
+Ranking multitest used.</li>
+<li><strong>test</strong> (<em>{'mannwhitneyu'</em><em>, </em><em>'wilcoxon'}</em><em>,</em>) – default=’wilcoxon’
+Ranking test used.</li>
+<li><strong>correction</strong> (<em>{'bonferroni'</em><em>, </em><em>'sidak'</em><em>, </em><em>'holm-sidak'</em><em>, </em><em>'holm'</em><em>,</em>) – <dl class="docutils">
+<dt>‘simes-hochberg’, ‘hommel’, ‘fdr_bh’, ‘fdr_by’, ‘fdr_tsbh’,</dt>
+<dd>’fdr_tsbky’},</dd>
+</dl>
+<p>default=None
+Method used to adjust the p-values.</p>
+</li>
+<li><strong>multitest_args</strong> (<em>dict</em>) – Optional ranking test arguments.</li>
+<li><strong>test_args</strong> (<em>dict</em>) – Optional ranking test arguments.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>multitest_table</strong> (<em>array-like</em>) – Table of p-value and rejection/non-rejection for the
+multitest hypothesis.</li>
+<li><strong>test_table</strong> (<em>array-like</em>) – Table of p-values and rejection/non-rejection for each test
+hypothesis.</li>
+</ul>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skvisualizations.scores.scores_table">
+<code class="descclassname">skvisualizations.scores.</code><code class="descname">scores_table</code><span class="sig-paren">(</span><em>datasets</em>, <em>estimators</em>, <em>scores</em>, <em>stds=None</em>, <em>greater_is_better=True</em>, <em>method='average'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/scores.html#scores_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.scores.scores_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scores table.</p>
+<p>Prints a table where each row represents a dataset and each column
+represents an estimator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>datasets</strong> (<em>array-like</em>) – List of dataset names.</li>
+<li><strong>estimators</strong> (<em>array-like</em>) – List of estimator names.</li>
+<li><strong>scores</strong> (<em>array-like</em>) – Matrix of scores where each column represents a model.</li>
+<li><strong>stds</strong> (<em>array_like</em><em>, </em><em>default=None</em>) – Matrix of standard deviations where each column represents a
+model.</li>
+<li><strong>greater_is_better</strong> (<em>boolean</em><em>, </em><em>default=True</em>) – Whether a greater score is better (score) or worse
+(loss).</li>
+<li><strong>method</strong> (<em>{'average'</em><em>, </em><em>'min'</em><em>, </em><em>'max'</em><em>, </em><em>'dense'</em><em>, </em><em>'ordinal'}</em><em>, </em><em>default='average'</em>) – Method used to solve ties.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>table</strong> – Table of mean and standard deviation of each estimator-dataset
+pair. A ranking of estimators is also generated.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array-like</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skvisualizations.validation">
+<span id="skvisualizations-validation-module"></span><h2>skvisualizations.validation module<a class="headerlink" href="#module-skvisualizations.validation" title="Permalink to this headline">¶</a></h2>
+<p>Scikit-learn-compatible visualizations for model validation.</p>
+<p>&#64;author: David Diaz Vico
+&#64;license: MIT</p>
+<dl class="function">
+<dt id="skvisualizations.validation.classifier_scatter">
+<code class="descclassname">skvisualizations.validation.</code><code class="descname">classifier_scatter</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>fname</em>, <em>pca_n_components=2</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/validation.html#classifier_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.validation.classifier_scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classifier scatter.</p>
+<p>Classifier scatter plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>array-like</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>features_shape</em><em>)</em>) – The transformed data.</li>
+<li><strong>y</strong> (<em>numpy array of shape</em><em> [</em><em>n_samples</em><em>]</em>) – Target values.</li>
+<li><strong>fname</strong> (<em>str</em><em> or </em><em>file-like object</em>) – <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html">https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html</a></li>
+<li><strong>pca_n_components</strong> (<em>integer</em><em>, </em><em>default=2</em>) – Dimension of the PCA projection of X.</li>
+<li><strong>**kwargs</strong> (<em>optional savefig named args</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skvisualizations.validation.keras_history_plot">
+<code class="descclassname">skvisualizations.validation.</code><code class="descname">keras_history_plot</code><span class="sig-paren">(</span><em>history</em>, <em>fname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/validation.html#keras_history_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.validation.keras_history_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Keras history plot.</p>
+<p>Train loss plotted for each training epoch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>history</strong> (<em>history object</em>) – Keras history object.</li>
+<li><strong>fname</strong> (<em>str</em><em> or </em><em>file-like object</em>) – <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html">https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html</a></li>
+<li><strong>**kwargs</strong> (<em>optional savefig named args</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skvisualizations.validation.metaparameter_plot">
+<code class="descclassname">skvisualizations.validation.</code><code class="descname">metaparameter_plot</code><span class="sig-paren">(</span><em>search</em>, <em>param</em>, <em>fname</em>, <em>score='score'</em>, <em>log_scale=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/validation.html#metaparameter_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.validation.metaparameter_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metaparameter plot.</p>
+<p>Train and test metric plotted along a meta-parameter search space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>search</strong> (<em>search object</em>) – Fitted sklearn search object.</li>
+<li><strong>param</strong> (<em>string</em>) – Name of the meta-parameter.</li>
+<li><strong>fname</strong> (<em>str</em><em> or </em><em>file-like object</em>) – <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html">https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html</a></li>
+<li><strong>score</strong> (<em>string</em>) – Name of the metric</li>
+<li><strong>log_scale</strong> (<em>boolean</em><em>, </em><em>default=True</em>) – Wether to use a logarithmic scale.</li>
+<li><strong>**kwargs</strong> (<em>optional savefig named args</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="skvisualizations.validation.regressor_scatter">
+<code class="descclassname">skvisualizations.validation.</code><code class="descname">regressor_scatter</code><span class="sig-paren">(</span><em>X</em>, <em>y</em>, <em>preds</em>, <em>fname</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/skvisualizations/validation.html#regressor_scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#skvisualizations.validation.regressor_scatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Regressor scatter.</p>
+<p>Regressor scatter plot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>X</strong> (<em>array-like</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>features_shape</em><em>)</em>) – The transformed data.</li>
+<li><strong>y</strong> (<em>numpy array of shape</em><em> [</em><em>n_samples</em><em>]</em>) – Target values.</li>
+<li><strong>preds</strong> (<em>numpy array of shape</em><em> [</em><em>n_samples</em><em>]</em>) – Predicted values.</li>
+<li><strong>fname</strong> (<em>str</em><em> or </em><em>file-like object</em>) – <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html">https://matplotlib.org/api/_as_gen/matplotlib.pyplot.savefig.html</a></li>
+<li><strong>**kwargs</strong> (<em>optional savefig named args</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-skvisualizations">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-skvisualizations" title="Permalink to this headline">¶</a></h2>
+<p>Scikit-learn-compatible visualizations.</p>
+<p>&#64;author: David Diaz Vico
+&#64;license: MIT</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">skvisualizations package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-skvisualizations.scores">skvisualizations.scores module</a></li>
+<li><a class="reference internal" href="#module-skvisualizations.validation">skvisualizations.validation module</a></li>
+<li><a class="reference internal" href="#module-skvisualizations">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/_static/skvisualizations.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, David Diaz Vico.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/_static/skvisualizations.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
