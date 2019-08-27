@@ -1,3 +1,5 @@
+***WARNING: This project is discontinued, and it's functionality has been included in the utils submodule of [scikit-datasets](https://github.com/daviddiazvico/scikit-datasets).***
+
 # scikit-visualizations
 Scikit-learn-compatible visualizations
 
