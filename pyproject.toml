@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = ["pandas", "scikit-learn>=1.4", "seaborn"]
+dependencies = ["pandas", "scikit-learn>=1.4", "seaborn", "statsmodels"]
 
 [project.optional-dependencies]
 test = ["coverage", "pytest", "pytest-cov"]

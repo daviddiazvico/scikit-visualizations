@@ -6,33 +6,34 @@ Tests.
 """
 
 import matplotlib.pyplot as plt
-plt.switch_backend('agg')
-from sklearn.datasets import load_boston, load_iris
+
+plt.switch_backend("agg")
+from sklearn.datasets import load_diabetes, load_iris
 from sklearn.dummy import DummyRegressor
 from sklearn.model_selection import GridSearchCV
 
-from skvisualizations.validation import (classifier_scatter, regressor_scatter,
-                                         metaparameter_plot)
+from skvisualizations.validation import classifier_scatter, regressor_scatter, metaparameter_plot
 
 
 def test_classifier_scatter():
     """Tests classifier scatter."""
     X, y = load_iris(return_X_y=True)
-    classifier_scatter(X, y, 'classifier_scatter.pdf')
+    classifier_scatter(X, y, "classifier_scatter.pdf")
 
 
 def test_regressor_scatter():
     """Tests regressor scatter."""
-    X, y = load_boston(return_X_y=True)
+    X, y = load_diabetes(return_X_y=True)
     estimator = DummyRegressor()
     estimator.fit(X, y)
-    regressor_scatter(X, y, estimator.predict(X), 'regressor_scatter.pdf')
+    regressor_scatter(X, y, estimator.predict(X), "regressor_scatter.pdf")
 
 
 def test_metaparameter_plot():
     """Tests metaparameter plot."""
-    X, y = load_boston(return_X_y=True)
-    estimator = GridSearchCV(DummyRegressor(strategy='constant'),
-                             {'constant': [1.0, 2.0, 3.0]})
+    X, y = load_diabetes(return_X_y=True)
+    estimator = GridSearchCV(
+        DummyRegressor(strategy="constant"), {"constant": [1.0, 2.0, 3.0]}, return_train_score=True
+    )
     estimator.fit(X, y)
-    metaparameter_plot(estimator, 'constant', 'metaparameter_plot.pdf')
+    metaparameter_plot(estimator, "constant", "metaparameter_plot.pdf")
